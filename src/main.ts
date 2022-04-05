@@ -27,9 +27,13 @@ async function run() {
         let cmd0 = "apt-get update"
         let cmd1 = "apt-get install build-essential libgl1-mesa-dev libxkbcommon-x11-0 libpulse-dev libxcb-util1 libxcb-glx0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-render0 libxcb-shape0 libxcb-shm0 libxcb-sync1 libxcb-xfixes0 libxcb-xinerama0 libxcb1 -y"
         if (core.getInput("install-deps") == "true") {
+            core.info("sudo " + cmd0);
+            core.info("sudo " + cmd1);
             await exec.exec("sudo " + cmd0)
             await exec.exec("sudo " + cmd1)
         } else if (core.getInput("install-deps") == "nosudo") {
+            core.info(cmd0);
+            core.info(cmd1);
             await exec.exec(cmd0)
             await exec.exec(cmd1)
         }
@@ -38,6 +42,7 @@ async function run() {
       if (core.getInput("cached") != "true") {
         // 7-zip is required, and not included on macOS
         if (process.platform == "darwin") {
+          core.info("brew install p7zip");
           await exec.exec("brew install p7zip")
         }
 
@@ -50,6 +55,7 @@ async function run() {
         await exec.exec(pythonName + " -m pip install setuptools wheel");
         await exec.exec(pythonName + " -m pip install \"py7zr" + core.getInput("py7zrversion") + "\"");
         await exec.exec(pythonName + " -m pip install \"aqtinstall" + core.getInput("aqtversion") + "\"");
+        core.info(pythonName + " -m pip install \"aqtinstall" + core.getInput("aqtversion") + "\"");
         let host = core.getInput("host");
         const target = core.getInput("target");
         let arch = core.getInput("arch");
@@ -124,6 +130,7 @@ async function run() {
 
         //run aqtinstall with args, and install tools if requested
         if (core.getInput("tools-only") != "true") {
+          core.info(`${pythonName} -m aqt install-qt`, args);
           await exec.exec(`${pythonName} -m aqt install-qt`, args);
         }
         if (tools) {
