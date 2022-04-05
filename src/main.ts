@@ -131,9 +131,9 @@ async function run() {
             const elements = element.split(",");
             const toolName = elements[0];
             const variantName = elements.length > 1 ? elements[elements.length - 1] : "";
-            console.log(`${pythonName} -m aqt install-tool ${host} ${target} ${toolName} ${variantName}`);
+            core.info(`${pythonName} -m aqt install-tool ${host} ${target} ${toolName} ${variantName}`);
             for (let data of extraArgs) {
-                console.log(data);
+                core.info(data);
             }
             await exec.exec(`${pythonName} -m aqt install-tool ${host} ${target} ${toolName} ${variantName}`, extraArgs);
           });
